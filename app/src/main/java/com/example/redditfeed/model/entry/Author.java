@@ -11,7 +11,7 @@ public class Author implements Serializable {
     @Element(name = "name")
     private String name;
 
-    @Element(name = "name")
+    @Element(name = "uri")
     private String uri;
 
     public String getName() {
@@ -28,5 +28,13 @@ public class Author implements Serializable {
 
     public void setUri(String uri) {
         this.uri = uri;
+    }
+
+    @Override
+    public String toString() {
+        return "Author{" +
+                "name='" + name + '\'' +
+                ", uri='" + uri + '\'' +
+                '}';
     }
 }

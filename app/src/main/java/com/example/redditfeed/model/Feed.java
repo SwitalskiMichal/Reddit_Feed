@@ -1,5 +1,7 @@
 package com.example.redditfeed.model;
 
+import androidx.annotation.NonNull;
+
 import com.example.redditfeed.model.entry.Entry;
 
 import org.simpleframework.xml.Element;
@@ -87,5 +89,11 @@ public class Feed implements Serializable {
 
     public void setEntrys(List<Entry> entrys) {
         this.entrys = entrys;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "Feed:  \n [Entrys: \n" + entrys +"]";
     }
 }
