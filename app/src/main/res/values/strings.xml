@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Reddit Feed</string>
+    <string name="post_url">Reddit Feed</string>
+    <string name="post_thumbnail">Reddit Feed</string>
+    <string name="post_title">Reddit Feed</string>
+    <string name="post_author">Reddit Feed</string>
+    <string name="post_updated">Reddit Feed</string>
 </resources>

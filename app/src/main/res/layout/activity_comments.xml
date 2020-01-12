@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/commentHeadingLayout">
+
+            <ImageView
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="10dp"
+                android:scaleType="centerCrop"
+                android:id="@+id/postThumbnail"/>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/postThumbnail"
+                android:layout_marginLeft="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/postTitle"
+                    android:layout_marginTop="3dp"
+                    android:text="Title"
+                    android:gravity="center"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/postAuthor"
+                    android:layout_marginTop="3dp"
+                    android:text="Author"
+                    android:gravity="center"
+                    android:layout_below="@+id/postTitle"
+                    android:textSize="10sp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/postUpdated"
+                    android:layout_marginTop="3dp"
+                    android:text="Last Updated"
+                    android:gravity="center"
+                    android:layout_below="@+id/postAuthor"
+                    android:textSize="10sp"/>
+
+            </RelativeLayout>
+
+            <ProgressBar
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:id="@+id/postLoadingProgressBar"
+                android:layout_centerInParent="true"
+                style="?android:attr/progressBarStyle"/>
+
+        </RelativeLayout>
+
+        <ProgressBar
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:id="@+id/commentsLoadingProgressBar"
+            android:layout_centerInParent="true"
+            style="?android:attr/progressBarStyle"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="10sp"
+            android:textStyle="bold"
+            android:text="Loading comments..."
+            android:layout_alignLeft="@id/commentsLoadingProgressBar"
+            android:layout_alignRight="@id/commentsLoadingProgressBar"
+            android:layout_alignTop="@id/commentsLoadingProgressBar"
+            android:layout_alignBottom="@id/commentsLoadingProgressBar"
+            android:id="@+id/progressText"/>
+
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/commentHeadingLayout"
+            android:id="@+id/commentsListView">
+
+        </ListView>
+
+    </RelativeLayout>
+
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

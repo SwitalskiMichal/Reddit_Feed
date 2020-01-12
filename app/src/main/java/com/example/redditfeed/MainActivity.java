@@ -2,11 +2,17 @@ package com.example.redditfeed;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.example.redditfeed.Comments.CommentsActivity;
 import com.example.redditfeed.model.Feed;
 import com.example.redditfeed.model.entry.Entry;
 
@@ -23,21 +29,46 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
 
-    private static final String BASE_URL = "https://www.reddit.com/r/";
+    URLS urls = new URLS();
+
+    private Button btnRefreshFeed;
+    private EditText mFeedName;
+    private String currentFeed;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Log.d(TAG, "onCreate: starting.");
+        btnRefreshFeed = (Button) findViewById(R.id.btnRefreshFeed);
+        mFeedName = (EditText) findViewById(R.id.etFeedName);
+        init();
 
+        btnRefreshFeed.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String feedName = mFeedName.getText().toString();
+                if(!feedName.equals("")){
+                    currentFeed = feedName;
+                    init();
+                }
+                else{
+                    init();
+                }
+            }
+        });
+
+    }
+
+    private void init(){
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(BASE_URL)
+                .baseUrl(urls.BASE_URL)
                 .addConverterFactory(SimpleXmlConverterFactory.create())
                 .build();
 
         FeedAPI feedAPI = retrofit.create(FeedAPI.class);
 
-        Call<Feed> call = feedAPI.getFeed();
+        Call<Feed> call = feedAPI.getFeed(currentFeed);
 
         call.enqueue(new Callback<Feed>() {
             @Override
@@ -48,10 +79,6 @@ public class MainActivity extends AppCompatActivity {
                 List<Entry> entrys = response.body().getEntrys();
 
                 Log.d(TAG, "onResponse: entrys: " + response.body().getEntrys());
-
-//                Log.d(TAG, "onResponse: author: " + entrys.get(0).getAuthor().getName());
-//                Log.d(TAG, "onResponse: updated: " + entrys.get(0).getUpdated());
-//                Log.d(TAG, "onResponse: title: " + entrys.get(0).getTitle());
 
                 ArrayList<Post> posts = new ArrayList<Post>();
                 for(int i=0; i<entrys.size(); i++){
@@ -71,6 +98,7 @@ public class MainActivity extends AppCompatActivity {
                         Log.e(TAG, "onResponse: IndexOutOfBoundsException(thumbnail): " + e.getMessage());
                     }
                     int lastPostion = postContent.size()-1;
+
                     posts.add(new Post(
                             entrys.get(i).getTitle(),
                             entrys.get(i).getAuthor().getName(),
@@ -81,18 +109,23 @@ public class MainActivity extends AppCompatActivity {
 
                 }
 
-//                for(int j=0; j<posts.size(); j++){
-//                    Log.d(TAG, "onResponseL \n " +
-//                            "PostURL: " + posts.get(j).getPostURL() + "\n " +
-//                            "ThumbnailURL: " + posts.get(j).getThumbnailURL() + "\n " +
-//                            "Title: " + posts.get(j).getTitle() + "\n " +
-//                            "Author: " + posts.get(j).getAuthor() + "\n " +
-//                            "updated: " + posts.get(j).getDate_updated() + "\n ");
-//                }
-
                 ListView listView = (ListView) findViewById(R.id.listView);
                 CustomListAdapter customListAdapter = new CustomListAdapter(MainActivity.this, R.layout.card_layout_main, posts);
                 listView.setAdapter(customListAdapter);
+
+                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        Log.d(TAG, "onItemClick: Clicked: " + posts.get(position).toString());
+                        Intent intent = new Intent(MainActivity.this, CommentsActivity.class);
+                        intent.putExtra("@string/post_url", posts.get(position).getPostURL());
+                        intent.putExtra("@string/post_thumbnail", posts.get(position).getThumbnailURL());
+                        intent.putExtra("@string/post_title", posts.get(position).getTitle());
+                        intent.putExtra("@string/post_author", posts.get(position).getAuthor());
+                        intent.putExtra("@string/post_updated", posts.get(position).getDate_updated());
+                        startActivity(intent);
+                    }
+                });
             }
 
             @Override
